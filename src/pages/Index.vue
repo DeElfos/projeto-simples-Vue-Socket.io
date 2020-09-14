@@ -1,7 +1,7 @@
 <template>
 <div>
     <p v-if="isConnected">Você está conectado!</p>
-    <p>Mensagem do servidor: "{{socketMessage}}"</p>
+    <p>Mensagem do servidor: "{{mensagemSocket}}"</p>
     <button @click="testaServidor()">Testar Servidor</button>
 </div>
 </template>
@@ -11,29 +11,30 @@ export default {
     data() {
         return {
             isConnected: false,
-            socketMessage: ''
+            mensagemSocket: ''
         }
     },
 
     sockets: {
         connect() {
-            // Fired when the socket connects.
+            // é disparado quando o socket conecta
+            console.log('conectou')
             this.isConnected = true;
         },
 
         disconnect() {
             this.isConnected = false;
         },
-        // Fired when the server sends something on the "messageChannel" channel.
-        messageChannel(data) {
-            this.socketMessage = data
+        // Disparado apenas quando o servidor der um emit no metodo "mensagem".
+        mensagem(data) {
+            this.mensagemSocket = data
         }
     },
 
     methods: {
         testaServidor() {
-            // Send the "pingServer" event to the server.
-            this.$socket.emit('testaServer', 'PING!')
+            // Envia o evento "pingServer" para o servidor.
+            this.$socket.emit('pingServer', 'PING!')
         }
     }
 }
